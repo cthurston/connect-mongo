@@ -80,11 +80,11 @@ module.exports = function (connect) {
 
       this.changeState('init')
 
-      const newConnectionCallback = (err, db) => {
+      const newConnectionCallback = (err, client) => {
         if (err) {
           this.connectionFailed(err)
         } else {
-          this.handleNewConnectionAsync(db)
+          this.handleNewConnectionAsync(client.db())
         }
       }
 
@@ -127,6 +127,7 @@ module.exports = function (connect) {
         .setCollection(db.collection(this.collectionName))
         .setAutoRemoveAsync()
         .then(() => this.changeState('connected'))
+        .catch(err => console.error(err))
     }
 
     setAutoRemoveAsync() {
